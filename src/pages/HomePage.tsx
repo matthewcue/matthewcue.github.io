@@ -355,7 +355,7 @@ const HomePage = () => {
                     <PrimaryButton href={`mailto:${profile.email}`} icon={<Icon><EnvelopeIcon /></Icon>}>
                       Email me
                     </PrimaryButton>
-                    <SecondaryButton to="/about" icon={<Icon><DocumentArrowDownIcon /></Icon>}>
+                    <SecondaryButton href={profile.resumeUrl} download icon={<Icon><DocumentArrowDownIcon /></Icon>}>
                       Download resume
                     </SecondaryButton>
                   </div>
@@ -384,7 +384,9 @@ const HomePage = () => {
                 <span>© 2024 Matthew Cue</span>
                 <div className="panel-footer-links">
                   <Link to="/about">About</Link>
-                  <Link to="/about">Resume</Link>
+                  <a href={profile.resumeUrl} target="_blank" rel="noreferrer">
+                    Resume
+                  </a>
                 </div>
               </motion.div>
             </section>
