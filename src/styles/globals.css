@@ -1060,11 +1060,16 @@ a {
   content: "";
   position: absolute;
   inset-inline: 0.4rem;
-  inset-block: 0.35rem;
-  background: radial-gradient(circle at 50% 50%, rgba(15, 23, 42, 0.12), transparent 70%);
-  opacity: 0.9;
-  z-index: 0;
-  pointer-events: none;
+    inset-block: 0.35rem;
+    border-radius: inherit;
+    background: radial-gradient(
+      circle at 50% 55%,
+      rgba(15, 23, 42, 0.06),
+      transparent 60%
+    );
+    opacity: 0.35;
+    z-index: 0;
+    pointer-events: none;
 }
 
 .primary-button > * {
@@ -2599,3 +2604,17 @@ a {
     min-width: 260px;
   }
 }
+
+.primary-button-label,
+ .primary-button .button-label {
+  text-shadow:
+    0 0.5px 0 rgba(255, 255, 255, 0.18),
+    0 0 0.5px rgba(15, 23, 42, 0.28);
+ }
+ 
+ [data-theme="dark"] .primary-button-label,
+ [data-theme="dark"] .primary-button .button-label {
+  text-shadow:
+    0 0.5px 0 rgba(15, 23, 42, 0.5),
+    0 0 0.5px rgba(0, 0, 0, 0.55);
+ }
