@@ -22,6 +22,7 @@ type AnchorProps = ButtonBaseProps & {
   to?: never;
   target?: string;
   rel?: string;
+  download?: boolean;
 };
 
 type NativeButtonProps = ButtonBaseProps & {
@@ -67,16 +68,20 @@ const SecondaryButton = ({
   );
 
   if ("to" in rest) {
+    const { to, ...linkProps } = rest;
+
     return (
-      <Link to={rest.to} {...sharedProps}>
+      <Link to={to} {...sharedProps} {...linkProps}>
         {content}
       </Link>
     );
   }
 
   if ("href" in rest) {
+    const { href, ...anchorProps } = rest;
+
     return (
-      <a href={rest.href} {...sharedProps}>
+      <a href={href} {...sharedProps} {...anchorProps}>
         {content}
       </a>
     );
