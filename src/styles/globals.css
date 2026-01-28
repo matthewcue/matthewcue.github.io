@@ -211,7 +211,6 @@ a {
 
 .app-main.home-main {
   padding: 0;
-  height: 100vh;
 }
 
 .site-header {
@@ -665,13 +664,13 @@ a {
 
 /* Home page scroll snap: gives the “one section per flick” feel without scroll hijacking. */
 .home-page {
-  height: 100%;
+  min-height: 100vh;
   position: relative;
 }
 
 .home-scroll {
   position: relative;
-  height: 100%;
+  min-height: 100vh;
   overflow-y: auto;
   scroll-snap-type: y mandatory;
   scroll-behavior: smooth;
