@@ -18,6 +18,7 @@ export interface LabEntry {
   steps: string[];
   lessons: string[];
   relatedProjects?: string[];
+  skillsUsed?: string[];
 }
 
 export const labEntries: LabEntry[] = [
@@ -37,7 +38,8 @@ export const labEntries: LabEntry[] = [
       "VLAN tagging is easiest to validate with a managed switch and clear naming.",
       "Logging early helps confirm rules are working as intended."
     ],
-    relatedProjects: ["homelab-siem"]
+    relatedProjects: ["homelab-siem"],
+    skillsUsed: ["Networking", "Firewall rules", "VLANs"]
   },
   {
     slug: "linux-hardening-baseline",
@@ -54,7 +56,8 @@ export const labEntries: LabEntry[] = [
     lessons: [
       "Automating the checklist saves time when rebuilding lab servers.",
       "Documenting defaults prevents missed steps."
-    ]
+    ],
+    skillsUsed: ["Linux", "Hardening", "SSH", "Monitoring"]
   }
 ];
 

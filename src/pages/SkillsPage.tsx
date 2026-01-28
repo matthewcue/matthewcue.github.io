@@ -1,28 +1,27 @@
 import PageTransition from "../components/PageTransition";
-import Section from "../components/Section";
-import SkillsMatrix from "../components/SkillsMatrix";
-import RoadmapTimeline from "../components/RoadmapTimeline";
-import { skillAreas, roadmapItems } from "../content/skills";
+import SkillsHero from "../components/skills/SkillsHero";
+import StrengthsSection from "../components/skills/StrengthsSection";
+import SkillsMatrix from "../components/skills/SkillsMatrix";
+import RoadmapSection from "../components/skills/RoadmapSection";
+import CertsFocusSection from "../components/skills/CertsFocusSection";
+import AppliedSkillsSection from "../components/skills/AppliedSkillsSection";
+import SkillsCtaSection from "../components/skills/SkillsCtaSection";
+import { skillAreas, roadmap } from "../content/skills";
+import { projects } from "../content/projects";
+import labEntries from "../content/labEntries";
+import profile from "../content/profile";
 
 const SkillsPage = () => (
   <PageTransition>
-    <Section
-      title="Skills overview"
-      description="Focused on IT support, sysadmin fundamentals, and growing cloud skills."
-    >
-      <p>
-        I am building depth in troubleshooting and operations while expanding
-        into automation and cloud services.
-      </p>
-    </Section>
-
-    <Section title="Skills matrix" description="Grouped by area for quick scanning.">
+    <div className="skills-page">
+      <SkillsHero />
+      <StrengthsSection />
       <SkillsMatrix areas={skillAreas} />
-    </Section>
-
-    <Section title="Roadmap" description="What I am planning and actively learning next.">
-      <RoadmapTimeline items={roadmapItems} />
-    </Section>
+      <RoadmapSection items={roadmap} />
+      <CertsFocusSection items={roadmap} />
+      <AppliedSkillsSection projects={projects} labEntries={labEntries} />
+      <SkillsCtaSection email={profile.email} />
+    </div>
   </PageTransition>
 );
 

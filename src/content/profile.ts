@@ -19,9 +19,9 @@ export interface Profile {
   interests?: string[];
 }
 
-const profile: Profile = {
+export const profile: Profile = {
   fullName: "Matthew Cue",
-  headline: "Entry-Level IT Support / Sysadmin",
+  headline: "Entry-Level IT Support / Junior Sysadmin",
   location: "California, USA",
   heroIntro: "Hands-on IT support candidate focused on reliable systems and calm troubleshooting.",
   heroSubcopy:
