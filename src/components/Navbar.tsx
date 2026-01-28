@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import type { CSSProperties } from "react";
+import { createPortal } from "react-dom";
 import { Link, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import {
@@ -100,6 +101,9 @@ const Navbar = () => {
     ? { duration: 0.1 }
     : { type: "spring", stiffness: 320, damping: 36 };
 
+  const isHome = location.pathname === "/";
+  const isMobileHome = isMobile && isHome;
+
   const isItemActive = (path: string) =>
     path === "/" ? location.pathname === "/" : location.pathname.startsWith(path);
 
@@ -113,7 +117,16 @@ const Navbar = () => {
   );
 
   return (
-    <header className="site-header" style={cursorStyles}>
+    <header
+      className={[
+        "site-header",
+        isMobile ? "site-header--mobile" : "",
+        isMobileHome ? "site-header--mobile-home" : ""
+      ]
+        .filter(Boolean)
+        .join(" ")}
+      style={cursorStyles}
+    >
       {/*
         Expanded vs. condensed layout:
         - Expanded shows full labels and a taller pill with extra padding.
@@ -243,78 +256,81 @@ const Navbar = () => {
       </nav>
 
       <AnimatePresence>
-        {isMobile && isMobileMenuOpen && (
-          <motion.div
-            className="nav-mobile-overlay"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: prefersReducedMotion ? 0 : 0.2 }}
-            onClick={() => setIsMobileMenuOpen(false)}
-          >
+        {isMobile &&
+          isMobileMenuOpen &&
+          createPortal(
             <motion.div
-              className="nav-mobile-panel"
-              initial={{ opacity: 0, y: -12 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -12 }}
-              transition={{ duration: prefersReducedMotion ? 0 : 0.24 }}
-              onClick={(event) => event.stopPropagation()}
+              className="nav-mobile-overlay"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: prefersReducedMotion ? 0 : 0.2 }}
+              onClick={() => setIsMobileMenuOpen(false)}
             >
-              <div className="nav-mobile-header">
-                <span className="nav-mobile-title">Navigate</span>
-                <button
-                  className="nav-mobile-close"
-                  type="button"
-                  aria-label="Close navigation"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  onPointerEnter={() => setInteractive(true)}
-                  onPointerLeave={() => setInteractive(false)}
-                >
-                  <XMarkIcon className="nav-mobile-close-icon" />
-                </button>
-              </div>
-              <ul className="nav-mobile-list" role="list">
-                {navItems.map((item) => {
-                  const IconComponent = item.icon;
-                  const isActive = isItemActive(item.to);
+              <motion.div
+                className="nav-mobile-panel"
+                initial={{ opacity: 0, y: -12 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -12 }}
+                transition={{ duration: prefersReducedMotion ? 0 : 0.24 }}
+                onClick={(event) => event.stopPropagation()}
+              >
+                <div className="nav-mobile-header">
+                  <span className="nav-mobile-title">Navigate</span>
+                  <button
+                    className="nav-mobile-close"
+                    type="button"
+                    aria-label="Close navigation"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    onPointerEnter={() => setInteractive(true)}
+                    onPointerLeave={() => setInteractive(false)}
+                  >
+                    <XMarkIcon className="nav-mobile-close-icon" />
+                  </button>
+                </div>
+                <ul className="nav-mobile-list" role="list">
+                  {navItems.map((item) => {
+                    const IconComponent = item.icon;
+                    const isActive = isItemActive(item.to);
 
-                  return (
-                    <li key={item.to} className="nav-mobile-item">
-                      <Link
-                        className={`nav-mobile-link ${isActive ? "is-active" : ""}`.trim()}
-                        to={item.to}
-                        onPointerEnter={() => setInteractive(true)}
-                        onPointerLeave={() => setInteractive(false)}
-                      >
-                        {isActive && (
-                          <motion.span
-                            className="nav-cursor nav-cursor-mobile"
-                            layoutId="navCursorMobile"
-                            transition={navCursorTransition}
-                          />
-                        )}
-                        <span className="nav-link-content">
-                          <Icon>
-                            <IconComponent />
-                          </Icon>
-                          <span className="nav-link-label">{item.label}</span>
-                        </span>
-                      </Link>
-                    </li>
-                  );
-                })}
-              </ul>
-              <div className="nav-mobile-footer">
-                <div className="nav-mobile-theme-row">
-                  <span className="nav-mobile-theme-label">Theme</span>
-                  <div className="nav-mobile-theme-control">
-                    <ThemeToggle />
+                    return (
+                      <li key={item.to} className="nav-mobile-item">
+                        <Link
+                          className={`nav-mobile-link ${isActive ? "is-active" : ""}`.trim()}
+                          to={item.to}
+                          onPointerEnter={() => setInteractive(true)}
+                          onPointerLeave={() => setInteractive(false)}
+                        >
+                          {isActive && (
+                            <motion.span
+                              className="nav-cursor nav-cursor-mobile"
+                              layoutId="navCursorMobile"
+                              transition={navCursorTransition}
+                            />
+                          )}
+                          <span className="nav-link-content">
+                            <Icon>
+                              <IconComponent />
+                            </Icon>
+                            <span className="nav-link-label">{item.label}</span>
+                          </span>
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </ul>
+                <div className="nav-mobile-footer">
+                  <div className="nav-mobile-theme-row">
+                    <span className="nav-mobile-theme-label">Theme</span>
+                    <div className="nav-mobile-theme-control">
+                      <ThemeToggle />
+                    </div>
                   </div>
                 </div>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
+              </motion.div>
+            </motion.div>,
+            document.body
+          )}
       </AnimatePresence>
     </header>
   );
