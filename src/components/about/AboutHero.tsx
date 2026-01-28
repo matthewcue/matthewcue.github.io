@@ -62,7 +62,6 @@ const AboutHero = () => {
           </motion.p>
           <motion.div className="about-hero__actions" variants={itemVariants}>
             {/* Update the resumeUrl in src/content/profile.ts to point to your real PDF. */}
-            <PrimaryButton href="/matthew-cue_resume.pdf" download>
             <PrimaryButton href={profile.resumeUrl} download>
               Download resume (PDF)
             </PrimaryButton>
