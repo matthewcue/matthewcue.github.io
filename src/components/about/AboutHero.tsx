@@ -4,7 +4,7 @@ import profile from "../../content/profile";
 import PrimaryButton from "../buttons/PrimaryButton";
 import SecondaryButton from "../buttons/SecondaryButton";
 import { useTheme } from "../../theme/ThemeProvider";
-import heroImage from "../../assets/matthew_cue_heroimage.svg";
+import heroImage from "../../assets/matthew_cue_heroimage.png";
 
 const AboutHero = () => {
   const prefersReducedMotion = useReducedMotion();

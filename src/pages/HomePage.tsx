@@ -15,7 +15,7 @@ import {
   EnvelopeIcon,
   UserCircleIcon
 } from "@heroicons/react/24/outline";
-import heroImage from "../assets/matthew_cue_heroimage.svg";
+import heroImage from "../assets/matthew_cue_heroimage.png";
 
 const heroPills = [
   { label: "Windows & Linux", className: "pill-one" },
