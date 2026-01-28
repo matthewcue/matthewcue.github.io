@@ -2837,15 +2837,15 @@ a {
 
 @media (max-width: 768px) {
   .home-scroll {
-    min-height: auto;
-    height: auto;
-    overflow-y: visible;
-    scroll-snap-type: none;
+    min-height: auto !important;
+    height: auto !important;
+    overflow-y: visible !important;
+    scroll-snap-type: none !important;
   }
 
   .home-slide {
-    min-height: auto;
-    scroll-snap-align: none;
-    scroll-snap-stop: normal;
+    min-height: auto !important;
+    scroll-snap-align: none !important;
+    scroll-snap-stop: normal !important;
   }
 }
