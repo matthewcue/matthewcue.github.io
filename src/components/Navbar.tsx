@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import type { CSSProperties } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import {
   Bars3Icon,
   BriefcaseIcon,
@@ -30,12 +30,16 @@ const SCROLL_THRESHOLD = 96;
 const Navbar = () => {
   const { setInteractive } = useCursor();
   const { accentColor, accentColorSoft, prefersReducedMotion } = useTheme();
+  const reduceMotion = useReducedMotion();
   const location = useLocation();
   const [isCondensed, setIsCondensed] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [expandedItemId, setExpandedItemId] = useState<string | null>(null);
+  const [hoveredKey, setHoveredKey] = useState<string | null>(null);
   const [canHover, setCanHover] = useState(false);
+
+  const isExpanded = !isCondensed;
 
   // Track scroll position to switch between expanded and condensed nav states.
   useEffect(() => {
@@ -78,7 +82,14 @@ const Navbar = () => {
   useEffect(() => {
     setIsMobileMenuOpen(false);
     setExpandedItemId(null);
+    setHoveredKey(null);
   }, [location.pathname]);
+
+  useEffect(() => {
+    if (!isExpanded) {
+      setHoveredKey(null);
+    }
+  }, [isExpanded]);
 
   const navCursorTransition = prefersReducedMotion
     ? { duration: 0 }
@@ -90,6 +101,10 @@ const Navbar = () => {
 
   const isItemActive = (path: string) =>
     path === "/" ? location.pathname === "/" : location.pathname.startsWith(path);
+
+  const activeKey =
+    navItems.find((item) => isItemActive(item.to))?.to ?? navItems[0]?.to ?? "/";
+  const currentSelectionKey = !isExpanded || hoveredKey == null ? activeKey : hoveredKey;
 
   const cursorStyles = useMemo(
     () =>
@@ -107,7 +122,7 @@ const Navbar = () => {
         - Expanded shows full labels and a taller pill with extra padding.
         - Condensed shrinks the pill and hides labels while keeping them in the DOM.
         - The pill is fixed to the viewport to float above sections. Adjust the
-          top offset in globals.css and the main padding in SiteLayout if overlap occurs.
+        - top offset in globals.css and the main padding in SiteLayout if overlap occurs.
       */}
       <nav className="site-nav" aria-label="Main navigation">
         {isMobile ? (
@@ -155,8 +170,24 @@ const Navbar = () => {
                 {navItems.map((item) => {
                   const IconComponent = item.icon;
                   const isActive = isItemActive(item.to);
+                  const isHovered = item.to === hoveredKey;
+                  const isSelectionTarget = item.to === currentSelectionKey;
                   const showLabel =
                     !isCondensed || expandedItemId === item.to || prefersReducedMotion;
+
+                  const iconClassName = [
+                    "nav-icon",
+                    isSelectionTarget ? "nav-icon--accent" : ""
+                  ]
+                    .filter(Boolean)
+                    .join(" ");
+
+                  const labelClassName = [
+                    "nav-label",
+                    isSelectionTarget || isHovered ? "nav-label--accent" : ""
+                  ]
+                    .filter(Boolean)
+                    .join(" ");
 
                   return (
                     <li key={item.to} className="nav-item">
@@ -168,21 +199,35 @@ const Navbar = () => {
                           if (isCondensed && canHover) {
                             setExpandedItemId(item.to);
                           }
+                          if (isExpanded) {
+                            setHoveredKey(item.to);
+                          }
                         }}
                         onPointerLeave={() => {
                           setInteractive(false);
                           if (isCondensed && canHover) {
                             setExpandedItemId(null);
                           }
+                          if (isExpanded) {
+                            setHoveredKey(null);
+                          }
                         }}
                         onFocus={() => {
+                          setInteractive(true);
                           if (isCondensed) {
                             setExpandedItemId(item.to);
                           }
+                          if (isExpanded) {
+                            setHoveredKey(item.to);
+                          }
                         }}
                         onBlur={() => {
+                          setInteractive(false);
                           if (isCondensed) {
                             setExpandedItemId(null);
+                          }
+                          if (isExpanded) {
+                            setHoveredKey(null);
                           }
                         }}
                       >
@@ -192,19 +237,48 @@ const Navbar = () => {
                           Keeping the cursor rendered only for the active item gives
                           a clean, single moving highlight instead of duplicates.
                         */}
-                        {isActive && (
+                        {isSelectionTarget && (
                           <motion.span
-                            className="nav-cursor"
-                            layoutId="navCursor"
-                            transition={navCursorTransition}
+                            className="nav-selection-bg"
+                            layoutId="navSelectionBg"
+                            transition={
+                              reduceMotion
+                                ? { duration: 0 }
+                                : {
+                                    type: "spring",
+                                    stiffness: 420,
+                                    damping: 32,
+                                    mass: 0.28
+                                  }
+                            }
                           />
                         )}
-                        <span className="nav-link-content">
-                          <Icon>
+                        <AnimatePresence>
+                          {isExpanded && isHovered && !reduceMotion && (
+                            <motion.span
+                              className="nav-hover-topbar"
+                              initial={{ scaleX: 0, opacity: 0 }}
+                              animate={{ scaleX: 1, opacity: 1 }}
+                              exit={{ scaleX: 0, opacity: 0 }}
+                              transition={{ duration: 0.16, ease: [0.2, 0.7, 0.3, 1] }}
+                            />
+                          )}
+                        </AnimatePresence>
+                        <motion.span
+                          className="nav-item-inner nav-link-content"
+                          animate={
+                            isExpanded && isHovered && !reduceMotion ? { y: -1 } : { y: 0 }
+                          }
+                          transition={{
+                            duration: reduceMotion ? 0 : 0.12,
+                            ease: "easeOut"
+                          }}
+                        >
+                          <Icon className={iconClassName}>
                             <IconComponent />
                           </Icon>
                           <motion.span
-                            className="nav-link-label"
+                            className={labelClassName}
                             animate={{
                               opacity: showLabel ? 1 : 0,
                               maxWidth: showLabel ? 200 : 0,
@@ -219,7 +293,7 @@ const Navbar = () => {
                           >
                             {item.label}
                           </motion.span>
-                        </span>
+                        </motion.span>
                       </Link>
                     </li>
                   );

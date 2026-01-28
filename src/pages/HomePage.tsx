@@ -7,6 +7,7 @@ import PrimaryButton from "../components/buttons/PrimaryButton";
 import SecondaryButton from "../components/buttons/SecondaryButton";
 import { DotGridOverlay } from "../components/home/DotGridOverlay";
 import { SocialChip } from "../components/home/SocialChip";
+import { SiteFooter } from "../components/layout/SiteFooter";
 import { useTheme } from "../theme/ThemeProvider";
 import profile from "../content/profile";
 import {
@@ -99,8 +100,6 @@ const HomePage = () => {
     ["0 12px 30px rgba(15, 23, 42, 0.08)", "0 20px 45px rgba(15, 23, 42, 0.18)"]
   );
   const snapshotBulletShift = useTransform(snapshotScroll, [0, 1], [6, -6]);
-
-  const footerOpacity = useTransform(roadmapScroll, [0.6, 1], [0, 1]);
 
   const heroVariants = {
     hidden: { opacity: 0, y: 16 },
@@ -377,16 +376,7 @@ const HomePage = () => {
                 </motion.aside>
               </div>
 
-              <motion.div
-                className="panel-footer"
-                style={{ opacity: prefersReducedMotion ? 1 : footerOpacity }}
-              >
-                <span>© 2024 Matthew Cue</span>
-                <div className="panel-footer-links">
-                  <Link to="/about">About</Link>
-                  <Link to="/about">Resume</Link>
-                </div>
-              </motion.div>
+              <SiteFooter variant="home" />
             </section>
           </div>
         </div>
