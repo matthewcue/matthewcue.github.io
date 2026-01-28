@@ -9,7 +9,6 @@ import heroImage from "../../assets/matthew_cue_heroimage.png";
 const AboutHero = () => {
   const prefersReducedMotion = useReducedMotion();
   const { accentColor, accentColorSoft } = useTheme();
-  const resumeInNewTab = profile.resumeUrl.endsWith(".pdf") || profile.resumeUrl.startsWith("http");
 
   const containerVariants = {
     hidden: {},
@@ -63,11 +62,7 @@ const AboutHero = () => {
           </motion.p>
           <motion.div className="about-hero__actions" variants={itemVariants}>
             {/* Update the resumeUrl in src/content/profile.ts to point to your real PDF. */}
-            <PrimaryButton
-              href={profile.resumeUrl}
-              target={resumeInNewTab ? "_blank" : undefined}
-              rel={resumeInNewTab ? "noreferrer" : undefined}
-            >
+            <PrimaryButton href="/matthew-cue_resume.pdf" download>
               Download resume (PDF)
             </PrimaryButton>
             <SecondaryButton href={`mailto:${profile.email}`}>Email me</SecondaryButton>

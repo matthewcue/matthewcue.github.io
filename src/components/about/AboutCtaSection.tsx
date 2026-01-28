@@ -8,7 +8,6 @@ import { useCursor } from "../../cursor/CursorContext";
 const AboutCtaSection = () => {
   const prefersReducedMotion = useReducedMotion();
   const { setInteractive } = useCursor();
-  const resumeInNewTab = profile.resumeUrl.endsWith(".pdf") || profile.resumeUrl.startsWith("http");
 
   return (
     <motion.section
@@ -25,11 +24,7 @@ const AboutCtaSection = () => {
           hear from you.
         </h2>
         <div className="about-cta__actions">
-          <PrimaryButton
-            href={profile.resumeUrl}
-            target={resumeInNewTab ? "_blank" : undefined}
-            rel={resumeInNewTab ? "noreferrer" : undefined}
-          >
+          <PrimaryButton href="/matthew-cue_resume.pdf" download>
             Download resume (PDF)
           </PrimaryButton>
           <SecondaryButton href={`mailto:${profile.email}`}>Email me</SecondaryButton>
