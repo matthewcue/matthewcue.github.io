@@ -212,7 +212,6 @@ a {
 .app-main.home-main {
   padding: 0;
   height: 100vh;
-  overflow: hidden;
 }
 
 .site-header {
@@ -249,6 +248,10 @@ a {
 
   .home-page,
   .home-scroll {
+    overflow-x: hidden;
+  }
+
+  .app-main.home-main {
     overflow-x: hidden;
   }
 

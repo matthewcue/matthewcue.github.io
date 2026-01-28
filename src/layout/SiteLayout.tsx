@@ -8,14 +8,17 @@ import ThemeToggleFloating from "../components/ThemeToggleFloating";
 // Shared shell for all pages: header, main content, and footer.
 const SiteLayout = () => {
   const location = useLocation();
-  const isHome = location.pathname === "/";
+  const isHomeRoute = location.pathname === "/";
+  const mainClassName = ["app-main", isHomeRoute ? "home-main" : ""]
+    .filter(Boolean)
+    .join(" ");
 
   return (
     <div className="app-shell">
       <Navbar />
       <ThemeToggleFloating />
-      <main className={`app-main ${isHome ? "home-main" : ""}`.trim()}>
-        {isHome ? (
+      <main className={mainClassName}>
+        {isHomeRoute ? (
           <Outlet />
         ) : (
           <Container>
