@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { motion, useScroll, useTransform } from "framer-motion";
 import PageTransition from "../components/PageTransition";
 import { useTheme } from "../theme/ThemeProvider";
-import heroImage from "../assets/matthew_cue_heroimage.png";
+import heroImage from "../assets/matthew_cue_heroimage.svg";
 
 const heroPills = [
   { label: "Windows & Linux", className: "pill-one" },
